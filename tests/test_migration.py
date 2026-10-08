@@ -5,7 +5,7 @@ import os
 import stat
 import tempfile
 import unittest
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from unittest import mock
 
 from codex_to_claude.cli import main
@@ -13,7 +13,7 @@ from codex_to_claude.core import (
     MAX_FILE, MigrationError, Options, Plan, build_plan, safe_path,
     strict_json,
 )
-from codex_to_claude import transaction
+from codex_to_claude import core, transaction
 from codex_to_claude.transaction import apply, load_restore, restore
 
 
@@ -409,6 +409,21 @@ class MigrationTests(unittest.TestCase):
             Plan(self.project).add(".git/config", b"forbidden")
         with self.assertRaises(MigrationError):
             load_restore(self.project, "../outside")
+
+    def test_rooted_paths_refused_for_both_path_flavours(self):
+        # Windows rooted paths have an anchor but need not be absolute.
+        for flavour in (PurePosixPath, PureWindowsPath):
+            for relative in ("/absolute", "/", "//server/share/file", "C:outside"):
+                with self.subTest(flavour=flavour.__name__, relative=relative):
+                    with mock.patch.object(core, "Path", flavour):
+                        with self.assertRaises(MigrationError):
+                            safe_path(self.project, relative)
+
+    def test_valid_relative_paths_stay_in_project(self):
+        self.write("nested/file.txt", "inside project")
+        for relative in ("nested/file.txt", "CLAUDE.md", ".claude/skills/review/SKILL.md"):
+            with self.subTest(relative=relative):
+                self.assertEqual(safe_path(self.project, relative), self.project / relative)
 
     def test_symbolic_source_and_destination_refused(self):
         outside = self.write("outside.txt", "outside", self.base)
