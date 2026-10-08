@@ -32,7 +32,8 @@ class MigrationError(Exception):
 def safe_path(root: Path, relative: str) -> Path:
     path = Path(relative)
     if (
-        not relative or not path.parts or path.is_absolute()
+        # A rooted Windows path may have no drive and not be absolute.
+        not relative or not path.parts or path.anchor
         or any(part in {"..", "."} for part in path.parts)
         or "\\" in relative or ":" in relative
     ):
