@@ -1,0 +1,8 @@
+[mcp_servers.example]
+command = "node"
+args = ["example-server.js"]
+env_vars = ["EXAMPLE_TOKEN"]
+
+[mcp_servers.remote]
+url = "https://example.com/mcp"
+bearer_token_env_var = "EXAMPLE_MCP_TOKEN"
