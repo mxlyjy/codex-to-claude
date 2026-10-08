@@ -4,7 +4,7 @@
 
 Move project instructions, skills, and supported MCP settings from Codex to Claude Code. Inspect the plan, apply it in one command, and restore the original files if needed.
 
-**Status: early preview (v0.2.0).** Source review and bundle integrity checks are complete. On 2026-10-08, local verification passed on macOS 26.4.1 / arm64 / Python 3.11.15: compilation, package installation, version checks, all 43 automated tests, and example preview, application, repeat application, and restoration. The 12 GitHub Actions OS/Python combinations and real Claude Code loading / MCP connectivity remain unverified. This targets Anthropic Claude Code.
+**Status: early preview (v0.2.0).** Source review and bundle integrity checks are complete. On 2026-10-08, local verification passed on macOS 26.4.1 / arm64 / Python 3.11.15: compilation, package installation, version checks, all 45 automated tests, and example preview, application, repeat application, and restoration. All 12 Linux/macOS/Windows × Python 3.11–3.14 jobs passed in [GitHub Actions run 37820171946](https://github.com/mxlyjy/codex-to-claude/actions/runs/37820171946) for source commit `33173a46325a51f3728971ceea29154cd2d3637d`: each Linux/macOS job passed all 45 tests; each Windows job passed 44 executed tests and skipped one POSIX executable-permission test (45 total). Real Claude Code loading / MCP connectivity remain unverified. This targets Anthropic Claude Code.
 
 ## Quick start
 
@@ -161,9 +161,9 @@ codex-to-claude --version
 codex-to-claude --project examples/demo --codex-home examples/codex-home --json
 ```
 
-The suite has 43 tests covering planning, conflicts, repeat runs, configuration layering, MCP credential handling, skill assets, agent roles, transcript export, backup integrity, restoration, write-failure rollback, locks, and unsafe paths.
+The suite has 45 tests (43 original tests plus two path-validation regressions) covering planning, conflicts, repeat runs, configuration layering, MCP credential handling, skill assets, agent roles, transcript export, backup integrity, restoration, write-failure rollback, locks, and unsafe paths.
 
-GitHub Actions is configured for Linux, macOS, and Windows on Python 3.11–3.14 (12 combinations). Local macOS verification passed on 2026-10-08, including all 43 tests and the example preview/apply/repeat/restore cycle; no passing GitHub Actions results or live Claude Code / MCP compatibility results are claimed. Check the actual Actions results and first test migration and restoration on a copy.
+All 12 Linux/macOS/Windows × Python 3.11–3.14 jobs passed in [GitHub Actions run 37820171946](https://github.com/mxlyjy/codex-to-claude/actions/runs/37820171946) for source commit `33173a46325a51f3728971ceea29154cd2d3637d`: each Linux/macOS job passed all 45 tests; each Windows job passed 44 executed tests and skipped one POSIX executable-permission test (45 total). The verified workflow steps are installation, compilation, unittest, and version checks. First test migration and restoration on a copy; CI does not establish live Claude Code loading or MCP connectivity.
 
 See REVIEW.md for the verification record and RELEASE_NOTES.md for the preview announcement.
 
